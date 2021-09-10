@@ -30,7 +30,21 @@
     <properties>
         <java.version>11</java.version>
         <dependency-check.fail-on-cvss>9</dependency-check.fail-on-cvss>
+        <docker-repo-prefix>europe-west6-docker.pkg.dev/swiss-wowbagger/wowbagger-docker-repo</docker-repo-prefix>
     </properties>
+
+    <build>
+        <!-- Defines plugins that are used in the modules. -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>3.1.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
     <scm>
         <connection>scm:git:https://github.com/nidi3/swiss-wowbagger</connection>

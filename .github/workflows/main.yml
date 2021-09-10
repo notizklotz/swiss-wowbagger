@@ -1,0 +1,33 @@
+name: CICD
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: swiss-wowbagger
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Build with Maven
+        run: mvn -B clean package
+
+      - name: Deploy to Cloud Run
+        run: gcloud run deploy swiss-wowbagger --image europe-west6-docker.pkg.dev/swiss-wowbagger/wowbagger-docker-repo/swiss-wowbagger-jdk-server --region europe-west6
