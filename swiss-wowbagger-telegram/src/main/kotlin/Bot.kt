@@ -1,31 +1,34 @@
 import de.sciss.jump3r.Main
 import guru.nidi.wowbagger.*
 import guru.nidi.wowbagger.voice.WowbaggerVoice
-import org.telegram.telegrambots.ApiContextInitializer
-import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.bots.TelegramWebhookBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook
 import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
+import org.telegram.telegrambots.updatesreceivers.DefaultWebhook
 import java.io.File
 
 fun main() {
-    ApiContextInitializer.init()
-    TelegramBotsApi().apply {
-        registerBot(Bot())
+    TelegramBotsApi(DefaultBotSession::class.java, DefaultWebhook().apply { setInternalUrl("/mybagger") }).apply {
+        registerBot(Bot(), SetWebhook().apply { url = System.getenv("BOT_EXTERNAL_URL") })
     }
 }
 
-class Bot : TelegramLongPollingBot() {
-    override fun getBotToken() = System.getenv("WOWBAGGER_BOT_TOKEN") ?: System.getenv("TOKEN")
-    override fun getBotUsername() = System.getenv("WOWBAGGER_BOT_USER") ?: System.getenv("USER")
+class Bot : TelegramWebhookBot() {
+    override fun getBotToken(): String = System.getenv("WOWBAGGER_BOT_TOKEN") ?: System.getenv("TOKEN")
+    override fun getBotUsername(): String = System.getenv("WOWBAGGER_BOT_USER") ?: System.getenv("USER")
+    override fun getBotPath(): String = "wowbagger"
 
-    override fun onUpdateReceived(update: Update) {
+    override fun onWebhookUpdateReceived(update: Update): BotApiMethod<*>? {
         if (update.message?.text != null) {
             val text = update.message.text.lowercase()
             println(text)
-            val chatId = update.message.chatId
+            val chatId = update.message.chatId.toString()
 
             fun send(text: String) = execute(SendMessage(chatId, text))
             fun sendAudio(text: String, desc: String, wav: File) = File(wav.parentFile, wav.name + ".mp3").use { out ->
@@ -83,6 +86,7 @@ class Bot : TelegramLongPollingBot() {
                 }
             }
         }
+        return null
     }
 
     private fun <T> File.use(block: (File) -> T): T = try {
@@ -96,7 +100,7 @@ class Bot : TelegramLongPollingBot() {
         return res?.let { Command(res.groups["cmd"]!!.value, res.groups["rest"]?.value?.trim() ?: "") }
     }
 
-    class Command(val command: String, val rest: String)
+    private data class Command(val command: String, val rest: String)
 
     private fun compose(rest: String): List<Entry<String>> {
         val names = rest.split(Regex("[ +,]+")).filter { it.isNotBlank() }.toList()
