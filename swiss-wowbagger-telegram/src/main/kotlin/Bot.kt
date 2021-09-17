@@ -1,6 +1,7 @@
 import de.sciss.jump3r.Main
 import guru.nidi.wowbagger.*
 import guru.nidi.wowbagger.voice.WowbaggerVoice
+import org.slf4j.bridge.SLF4JBridgeHandler
 import org.telegram.telegrambots.bots.TelegramWebhookBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
@@ -14,11 +15,12 @@ import org.telegram.telegrambots.updatesreceivers.DefaultWebhook
 import java.io.File
 
 fun main() {
-    TelegramBotsApi(DefaultBotSession::class.java, DefaultWebhook().apply { setInternalUrl("/mybagger") }).apply {
+    SLF4JBridgeHandler.removeHandlersForRootLogger()
+    SLF4JBridgeHandler.install()
+
+    TelegramBotsApi(DefaultBotSession::class.java, DefaultWebhook().apply { setInternalUrl("/") }).apply {
         registerBot(Bot(), SetWebhook().apply { url = System.getenv("BOT_EXTERNAL_URL") })
     }
-
-    println("started")
 }
 
 class Bot : TelegramWebhookBot() {
