@@ -1,6 +1,7 @@
 import de.sciss.jump3r.Main
 import guru.nidi.wowbagger.*
 import guru.nidi.wowbagger.voice.WowbaggerVoice
+import org.slf4j.LoggerFactory
 import org.slf4j.bridge.SLF4JBridgeHandler
 import org.telegram.telegrambots.bots.TelegramWebhookBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -18,8 +19,11 @@ fun main() {
     SLF4JBridgeHandler.removeHandlersForRootLogger()
     SLF4JBridgeHandler.install()
 
+    val externalUrl = System.getenv("BOT_EXTERNAL_URL")
+    LoggerFactory.getLogger("wowbagger").info("External URL: $externalUrl")
+
     TelegramBotsApi(DefaultBotSession::class.java, DefaultWebhook().apply { setInternalUrl("/") }).apply {
-        registerBot(Bot(), SetWebhook().apply { url = System.getenv("BOT_EXTERNAL_URL") })
+        registerBot(Bot(), SetWebhook().apply { url = externalUrl })
     }
 }
 
