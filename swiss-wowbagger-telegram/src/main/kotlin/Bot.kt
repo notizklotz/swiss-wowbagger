@@ -17,6 +17,8 @@ fun main() {
     TelegramBotsApi(DefaultBotSession::class.java, DefaultWebhook().apply { setInternalUrl("/mybagger") }).apply {
         registerBot(Bot(), SetWebhook().apply { url = System.getenv("BOT_EXTERNAL_URL") })
     }
+
+    println("started")
 }
 
 class Bot : TelegramWebhookBot() {
