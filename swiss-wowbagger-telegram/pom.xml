@@ -24,7 +24,7 @@
 
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-cio</artifactId>
+            <artifactId>ktor-server-netty</artifactId>
         </dependency>
         <dependency>
             <groupId>io.ktor</groupId>
