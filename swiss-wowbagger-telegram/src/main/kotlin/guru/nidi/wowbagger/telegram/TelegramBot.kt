@@ -25,10 +25,11 @@ import io.ktor.http.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.telegram.telegrambots.meta.api.objects.Update
+import java.util.concurrent.TimeUnit
 
 private val botToken: String = System.getenv("WOWBAGGER_BOT_TOKEN") ?: System.getenv("TOKEN")
 private val botUsername: String = System.getenv("WOWBAGGER_BOT_USER") ?: System.getenv("USER")
-private val webookUpdateHandler = WebhookUpdateHandler(TelegramApiClient(botToken), botUsername)
+private val webookUpdateHandler = TelegramMessageHandler(TelegramApiClient(botToken), botUsername)
 
 fun main() {
     embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 8080) {
@@ -40,10 +41,22 @@ fun main() {
             post("/$botToken/webhook") {
                 val update = call.receive<Update>()
 
-                webookUpdateHandler.onWebhookUpdateReceived(update)
+                webookUpdateHandler.onUpdateReceived(update)
 
                 call.respond(HttpStatusCode.NoContent)
             }
+
+            get("/$botToken/ps") {
+                val output = callPs()
+
+                call.respond(HttpStatusCode.OK, output)
+            }
         }
     }.start(wait = true)
+}
+
+private fun callPs(): String {
+    val proc = ProcessBuilder().command("ps", "aux").start()
+    proc.waitFor(5, TimeUnit.SECONDS)
+    return proc.inputStream.readAllBytes().toString(Charsets.UTF_8)
 }

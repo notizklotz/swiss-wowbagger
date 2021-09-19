@@ -29,9 +29,9 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.bots.AbsSender
 import java.io.File
 
-class WebhookUpdateHandler(private val telegramApiClient: AbsSender, private val botUsername: String) {
+class TelegramMessageHandler(private val telegramApiClient: AbsSender, private val botUsername: String) {
 
-    fun onWebhookUpdateReceived(update: Update) {
+    fun onUpdateReceived(update: Update) {
 
         if (update.message?.text != null) {
             LoggerFactory.getLogger(javaClass).info("Handling message: {}", update.message.text)

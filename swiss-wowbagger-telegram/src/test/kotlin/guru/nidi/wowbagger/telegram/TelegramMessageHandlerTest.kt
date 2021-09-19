@@ -25,13 +25,13 @@ import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.bots.AbsSender
 
-internal class WebhookUpdateHandlerTest {
+internal class TelegramMessageHandlerTest {
 
     @Test
     fun `ignore message without command`() {
         val telegramApiClient = mockk<AbsSender>()
 
-        WebhookUpdateHandler(telegramApiClient, "adf").onWebhookUpdateReceived(
+        TelegramMessageHandler(telegramApiClient, "adf").onUpdateReceived(
             Update().apply {
                 updateId = 42
                 message = Message().apply {
@@ -48,7 +48,7 @@ internal class WebhookUpdateHandlerTest {
         val telegramApiClient = mockk<AbsSender>()
         every { telegramApiClient.execute(SendMessage("4242", HELP_TEXT)) } returns Message()
 
-        WebhookUpdateHandler(telegramApiClient, "adf").onWebhookUpdateReceived(
+        TelegramMessageHandler(telegramApiClient, "adf").onUpdateReceived(
             Update().apply {
                 updateId = 42
                 message = Message().apply {
