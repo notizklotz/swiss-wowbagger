@@ -1,3 +1,2 @@
-FROM adoptopenjdk/openjdk11-openj9:debianslim-jre
-RUN echo 'deb http://deb.debian.org/debian buster contrib' >> /etc/apt/sources.list
+FROM eclipse-temurin:11-jre
 RUN apt-get update && apt-get -y install mbrola
