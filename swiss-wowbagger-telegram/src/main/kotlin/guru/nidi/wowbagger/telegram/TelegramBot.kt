@@ -46,10 +46,8 @@ fun main() {
                 call.respond(HttpStatusCode.NoContent)
             }
 
-            get("/$botToken/ps") {
-                val output = callPs()
-
-                call.respond(HttpStatusCode.OK, output)
+            get("/$botToken/mem") {
+                call.respond(HttpStatusCode.OK, callPs() + callFree())
             }
         }
     }.start(wait = true)
@@ -57,6 +55,13 @@ fun main() {
 
 private fun callPs(): String {
     val proc = ProcessBuilder().command("ps", "aux").start()
+    proc.waitFor(5, TimeUnit.SECONDS)
+    return proc.inputStream.readAllBytes().toString(Charsets.UTF_8)
+}
+
+
+private fun callFree(): String {
+    val proc = ProcessBuilder().command("free", "-h").start()
     proc.waitFor(5, TimeUnit.SECONDS)
     return proc.inputStream.readAllBytes().toString(Charsets.UTF_8)
 }
