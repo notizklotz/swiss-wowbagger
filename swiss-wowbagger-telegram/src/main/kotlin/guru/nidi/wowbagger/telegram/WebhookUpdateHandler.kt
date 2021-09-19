@@ -1,44 +1,45 @@
+/*
+ * Copyright © 2018 Stefan Niederhauser (nidin@gmx.ch)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package guru.nidi.wowbagger.telegram
+
 import de.sciss.jump3r.Main
-import guru.nidi.wowbagger.*
+import guru.nidi.wowbagger.Entry
+import guru.nidi.wowbagger.composeSpeech
+import guru.nidi.wowbagger.toPhonemes
+import guru.nidi.wowbagger.toText
 import guru.nidi.wowbagger.voice.WowbaggerVoice
 import org.slf4j.LoggerFactory
-import org.slf4j.bridge.SLF4JBridgeHandler
-import org.telegram.telegrambots.bots.TelegramWebhookBot
-import org.telegram.telegrambots.meta.TelegramBotsApi
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook
 import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Update
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
-import org.telegram.telegrambots.updatesreceivers.DefaultWebhook
+import org.telegram.telegrambots.meta.bots.AbsSender
 import java.io.File
 
-fun main() {
-    SLF4JBridgeHandler.removeHandlersForRootLogger()
-    SLF4JBridgeHandler.install()
+class WebhookUpdateHandler(private val telegramApiClient: AbsSender, private val botUsername: String) {
 
-    val externalUrl = System.getenv("BOT_EXTERNAL_URL")
-    LoggerFactory.getLogger("wowbagger").info("External URL: $externalUrl")
+    fun onWebhookUpdateReceived(update: Update) {
 
-    TelegramBotsApi(DefaultBotSession::class.java, DefaultWebhook().apply { setInternalUrl("/") }).apply {
-        registerBot(Bot(), SetWebhook().apply { url = externalUrl })
-    }
-}
-
-class Bot : TelegramWebhookBot() {
-    override fun getBotToken(): String = System.getenv("WOWBAGGER_BOT_TOKEN") ?: System.getenv("TOKEN")
-    override fun getBotUsername(): String = System.getenv("WOWBAGGER_BOT_USER") ?: System.getenv("USER")
-    override fun getBotPath(): String = "wowbagger"
-
-    override fun onWebhookUpdateReceived(update: Update): BotApiMethod<*>? {
         if (update.message?.text != null) {
+            LoggerFactory.getLogger(javaClass).info("Handling message: {}", update.message.text)
+
             val text = update.message.text.lowercase()
-            println(text)
             val chatId = update.message.chatId.toString()
 
-            fun send(text: String) = execute(SendMessage(chatId, text))
+            fun send(text: String) = telegramApiClient.execute(SendMessage(chatId, text))
             fun sendAudio(text: String, desc: String, wav: File) = File(wav.parentFile, wav.name + ".mp3").use { out ->
                 Main().run(
                     arrayOf(
@@ -53,7 +54,7 @@ class Bot : TelegramWebhookBot() {
                         out.absolutePath
                     )
                 )
-                execute(SendAudio().apply {
+                telegramApiClient.execute(SendAudio().apply {
                     setChatId(chatId)
                     caption = desc
                     performer = "The Wowbagger"
@@ -66,7 +67,7 @@ class Bot : TelegramWebhookBot() {
 
             parseCommand(text)?.let { command ->
                 when {
-                    command.command == "help" || command.command.matches(Regex("h[iü][ul]f")) -> send("/schrib näme\n/sag (schnäll | langsam) näme")
+                    command.command == "help" || command.command.matches(Regex("h[iü][ul]f")) -> send(HELP_TEXT)
                     command.command == "schrib" -> send(compose(command.rest).toText())
                     command.command.matches(Regex("s[eaä]g")) -> {
                         val say = Regex("(?<speed>(schn[eaä](u|ll))|(langsam))?(?<rest>.*)").matchEntire(command.rest)
@@ -94,7 +95,6 @@ class Bot : TelegramWebhookBot() {
                 }
             }
         }
-        return null
     }
 
     private fun <T> File.use(block: (File) -> T): T = try {
@@ -114,4 +114,7 @@ class Bot : TelegramWebhookBot() {
         val names = rest.split(Regex("[ +,]+")).filter { it.isNotBlank() }.toList()
         return composeSpeech(names).connect()
     }
+
 }
+
+const val HELP_TEXT = "/schrib näme\n/sag (schnäll | langsam) näme"

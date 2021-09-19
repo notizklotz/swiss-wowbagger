@@ -42,6 +42,7 @@
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <configuration>
+                    <skip>${docker.build.skip}</skip>
                     <to>
                         <image>${docker-repo-prefix}/swiss-wowbagger-twitter</image>
                     </to>

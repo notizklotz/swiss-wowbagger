@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>guru.nidi</groupId>
         <artifactId>guru-nidi-parent-pom</artifactId>
         <version>1.1.38</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <packaging>pom</packaging>
@@ -29,9 +30,37 @@
 
     <properties>
         <java.version>11</java.version>
+        <kotlin.version>1.5.30</kotlin.version>
         <dependency-check.fail-on-cvss>9</dependency-check.fail-on-cvss>
+        <docker.build.skip>true</docker.build.skip>
         <docker-repo-prefix>europe-west6-docker.pkg.dev/swiss-wowbagger/wowbagger-docker-repo</docker-repo-prefix>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-bom</artifactId>
+                <version>${kotlin.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>io.ktor</groupId>
+                <artifactId>ktor-bom</artifactId>
+                <version>1.6.3</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>2.12.3</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <!-- Defines plugins that are used in the modules. -->
@@ -50,7 +79,7 @@
         <connection>scm:git:https://github.com/nidi3/swiss-wowbagger</connection>
         <developerConnection>scm:git:https://github.com/nidi3/swiss-wowbagger</developerConnection>
         <url>https://github.com/nidi3/swiss-wowbagger</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
 </project>
