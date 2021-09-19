@@ -25,7 +25,6 @@ import io.ktor.http.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.telegram.telegrambots.meta.api.objects.Update
-import java.util.concurrent.TimeUnit
 
 private val botToken: String = System.getenv("WOWBAGGER_BOT_TOKEN") ?: System.getenv("TOKEN")
 private val botUsername: String = System.getenv("WOWBAGGER_BOT_USER") ?: System.getenv("USER")
@@ -45,23 +44,6 @@ fun main() {
 
                 call.respond(HttpStatusCode.NoContent)
             }
-
-            get("/$botToken/mem") {
-                call.respond(HttpStatusCode.OK, callPs() + callFree())
-            }
         }
     }.start(wait = true)
-}
-
-private fun callPs(): String {
-    val proc = ProcessBuilder().command("ps", "aux").start()
-    proc.waitFor(5, TimeUnit.SECONDS)
-    return proc.inputStream.readAllBytes().toString(Charsets.UTF_8)
-}
-
-
-private fun callFree(): String {
-    val proc = ProcessBuilder().command("free", "-h").start()
-    proc.waitFor(5, TimeUnit.SECONDS)
-    return proc.inputStream.readAllBytes().toString(Charsets.UTF_8)
 }
