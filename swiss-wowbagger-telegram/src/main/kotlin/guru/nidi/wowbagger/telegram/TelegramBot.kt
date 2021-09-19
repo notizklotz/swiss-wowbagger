@@ -22,8 +22,8 @@ import io.ktor.response.*
 import io.ktor.request.*
 import io.ktor.routing.*
 import io.ktor.http.*
+import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import org.telegram.telegrambots.meta.api.objects.Update
 
 private val botToken: String = System.getenv("WOWBAGGER_BOT_TOKEN") ?: System.getenv("TOKEN")
@@ -31,7 +31,7 @@ private val botUsername: String = System.getenv("WOWBAGGER_BOT_USER") ?: System.
 private val webookUpdateHandler = WebhookUpdateHandler(TelegramApiClient(botToken), botUsername)
 
 fun main() {
-    embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 8080) {
+    embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
         install(ContentNegotiation) {
             jackson()
         }

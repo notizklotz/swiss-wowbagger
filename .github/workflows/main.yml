@@ -59,7 +59,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
       - name: Deploy to Cloud Run
-        run: gcloud run deploy swiss-wowbagger-telegram --image europe-west6-docker.pkg.dev/swiss-wowbagger/wowbagger-docker-repo/swiss-wowbagger-telegram --region europe-west6 --max-instances=1 --memory=256Mi --ingress=all --allow-unauthenticated
+        run: gcloud run deploy swiss-wowbagger-telegram --image europe-west6-docker.pkg.dev/swiss-wowbagger/wowbagger-docker-repo/swiss-wowbagger-telegram --region europe-west6 --max-instances=1 --memory=128Mi --ingress=all --allow-unauthenticated
 
   deploy-wowbagger-twitter:
     runs-on: ubuntu-latest
