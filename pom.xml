@@ -33,7 +33,7 @@
         <kotlin.version>1.5.30</kotlin.version>
         <dependency-check.fail-on-cvss>9</dependency-check.fail-on-cvss>
         <docker.build.skip>true</docker.build.skip>
-        <docker-repo-prefix>europe-west6-docker.pkg.dev/swiss-wowbagger/wowbagger-docker-repo</docker-repo-prefix>
+        <docker-repo-prefix>europe-west6-docker.pkg.dev/swiss-wowbagger/docker</docker-repo-prefix>
     </properties>
 
     <dependencyManagement>
