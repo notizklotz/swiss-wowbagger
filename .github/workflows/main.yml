@@ -66,8 +66,7 @@ jobs:
           gcloud run deploy swiss-wowbagger-telegram --image europe-west6-docker.pkg.dev/swiss-wowbagger/docker/swiss-wowbagger-telegram
           --region europe-west6 --max-instances=1  --ingress=all --allow-unauthenticated
           --port=8080 --memory=256Mi
-          --update-env-vars TOKEN=${{ secrets.TELEGRAM_TOKEN }},USER=${{ secrets.TELEGRAM_USER }},JAVA_TOOL_OPTIONS='-XX:+TieredCompilation -XX:TieredStopAtLevel=1 -Xss256k'
-          
+          --set-env-vars TOKEN=${{ secrets.TELEGRAM_TOKEN }},USER=${{ secrets.TELEGRAM_USER }}
 
 #  deploy-wowbagger-twitter:
 #    runs-on: ubuntu-latest
