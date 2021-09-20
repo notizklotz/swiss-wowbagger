@@ -7,7 +7,37 @@ Stiller Has' [grusig](https://www.youtube.com/watch?v=dfL_IRXVLtQ).
 
 **[Huere Siech, säg mou öppis!](https://nidi3.github.io/swiss-wowbagger)**
 
+## GCloud Project
+
+https://console.cloud.google.com/run?project=swiss-wowbagger
+
+[Schaltstelle](https://www.schaltstelle.ch) Members can add themselves as _Owner_ of the project.
+
 ## Setup Google Cloud access
+Only needed if you need access to the project's Docker repo or if you want to deploy from localhost.
+
 1. Install Google Cloud SDK https://cloud.google.com/sdk/docs/install
-2. Setup Google Cloud SDK https://cloud.google.com/sdk/docs/initializing
-3. Configure GCloud docker repo: `gcloud auth configure-docker europe-west6-docker.pkg.dev`
+2. Setup Google Cloud SDK https://cloud.google.com/sdk/docs/initializing (Project ID: swiss-wowbagger)
+3. Configure authentication for the docker repo: `gcloud auth configure-docker europe-west6-docker.pkg.dev`
+4. 
+## Register Telegram Bot Webhook
+`curl -F "url=https://swiss-wowbagger-telegram-ultgi7by3q-oa.a.run.app/${WOWBAGGER_BOT_TOKEN}/webhook" https://api.telegram.org/bot${WOWBAGGER_BOT_TOKEN}/setWebhook`
+
+For local testing:
+1. create a public tunnel to localhost using `ngrok http 8080`
+2. Switch the Telegram Bot registration to your public ngrok HTTPS URL using the curl command above
+
+## Update Docker base image
+
+The base image is referenced using digest instead of tags to prevent working with out-of-date images.
+
+1. Setup Google Cloud access (see section above)
+2 `cd swiss-wowbagger-docker-mbrola && ./build.sh`
+2. Update swiss-wowbagger-docker-mbrola container digest in the `pom.xml` files of all submodules
+
+## Locally run Docker images
+
+Please note that [Jib](https://github.com/GoogleContainerTools/jib) is used for building and pushing the Docker
+images. Per default it doesn't use the Docker daemon so the images are not available locally. See
+https://github.com/GoogleContainerTools/jib/blob/master/docs/faq.md#can-i-build-to-a-local-docker-daemon for options or
+pull the images from the GCloud repo.
