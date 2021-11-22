@@ -30,10 +30,11 @@
 
     <properties>
         <java.version>11</java.version>
-        <kotlin.version>1.5.30</kotlin.version>
+        <kotlin.version>1.6.0</kotlin.version>
         <dependency-check.fail-on-cvss>9</dependency-check.fail-on-cvss>
         <docker.build.skip>true</docker.build.skip>
         <docker-repo-prefix>europe-west6-docker.pkg.dev/swiss-wowbagger/docker</docker-repo-prefix>
+        <docker.base.image.tag>${docker-repo-prefix}/swiss-wowbagger-docker-mbrola@sha256:b9bf57c8f1f93c73d940c8f3260345530137bbb41bd806ebeb26e664a77448cc</docker.base.image.tag>
     </properties>
 
     <dependencyManagement>
@@ -48,14 +49,14 @@
             <dependency>
                 <groupId>io.ktor</groupId>
                 <artifactId>ktor-bom</artifactId>
-                <version>1.6.3</version>
+                <version>1.6.5</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.12.3</version>
+                <version>2.12.5</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
