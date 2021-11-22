@@ -1,19 +1,23 @@
 import guru.nidi.wowbagger.*
 import guru.nidi.wowbagger.Wowbagger.name
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.http.*
+import io.ktor.jackson.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import twitter4j.*
 import twitter4j.conf.ConfigurationBuilder
 import twitter4j.util.function.Consumer
-import java.lang.Thread.sleep
-import kotlin.concurrent.thread
 import kotlin.random.Random
 
-const val HOUR = 1000 * 60 * 60
-
 fun main() {
-    val consumerKey = System.getenv("WOWBAGGER_BOT_CONSUMER_KEY") ?: System.getenv("CONSUMER_KEY")
-    val consumerSecret = System.getenv("WOWBAGGER_BOT_CONSUMER_SECRET") ?: System.getenv("CONSUMER_SECRET")
-    val accessToken = System.getenv("WOWBAGGER_BOT_ACCESS_TOKEN") ?: System.getenv("ACCESS_TOKEN")
-    val accessSecret = System.getenv("WOWBAGGER_BOT_ACCESS_SECRET") ?: System.getenv("ACCESS_SECRET")
+    val consumerKey: String = System.getenv("WOWBAGGER_BOT_CONSUMER_KEY") ?: System.getenv("CONSUMER_KEY")
+    val consumerSecret: String = System.getenv("WOWBAGGER_BOT_CONSUMER_SECRET") ?: System.getenv("CONSUMER_SECRET")
+    val accessToken: String = System.getenv("WOWBAGGER_BOT_ACCESS_TOKEN") ?: System.getenv("ACCESS_TOKEN")
+    val accessSecret: String = System.getenv("WOWBAGGER_BOT_ACCESS_SECRET") ?: System.getenv("ACCESS_SECRET")
 
     val config = ConfigurationBuilder().run {
         setDebugEnabled(true)
@@ -24,17 +28,27 @@ fun main() {
         build()
     }
     val twitter = TwitterFactory(config).instance
-    val twitterStream = TwitterStreamFactory(config).instance
-    twitterStream.onStatus { run {} }
-    twitterStream.filter(FilterQuery(twitter.id)).onStatus(TwitterListener(twitter))
-    thread {
-        while (true) {
-//            println(tweet(listOf()))
-            twitter.updateStatus(tweet(listOf()))
-            sleep((23.5 * HOUR + random(HOUR)).toLong())
-//            sleep((HOUR / 2 + random(HOUR / 4)).toLong())
+
+    embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 8080) {
+        install(ContentNegotiation) {
+            jackson()
         }
-    }
+
+        routing {
+            post("/random") {
+                twitter.updateStatus(tweet(listOf()))
+
+                call.respond(HttpStatusCode.NoContent)
+            }
+
+            post("/webhook") {
+                call.respond(HttpStatusCode.NotImplemented)
+//                val twitterStream = TwitterStreamFactory(config).instance
+//                twitterStream.onStatus { run {} }
+//                twitterStream.filter(FilterQuery(twitter.id)).onStatus(TwitterListener(twitter))
+            }
+        }
+    }.start(wait = true)
 }
 
 fun tweet(names: List<String>): String {
