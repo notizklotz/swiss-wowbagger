@@ -22,6 +22,19 @@ For local testing:
 1. create a public tunnel to localhost using `ngrok http 8080`
 2. Switch the Telegram Bot registration to your public ngrok HTTPS URL using the curl command above
 
+## Twitter Bot development
+
+
+"Read and write and Direct message" in App permissions before creating the acccess tokens
+
+Create Environment
+https://developer.twitter.com/en/account/environments
+
+1. Run `TwitterBot` using the various ENV variables
+2. Run `ngrok http 8080`
+3. Run `twurl -d 'url=https://a9da-2a02-168-a9fe-0-73ba-8f2b-996a-a99f.ngrok.io/webhook' /1.1/account_activity/all/test/webhooks.json`. Replacing the ngrok url with your proper one
+4. 
+
 ## Setup Google Cloud SDK access
 Only needed if you need access to the project's Docker repo or if you want to deploy from localhost.
 
