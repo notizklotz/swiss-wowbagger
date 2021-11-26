@@ -22,21 +22,23 @@ import io.ktor.response.*
 import io.ktor.request.*
 import io.ktor.routing.*
 import io.ktor.http.*
+import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import org.telegram.telegrambots.meta.api.objects.Update
 
 private val botToken: String = System.getenv("WOWBAGGER_BOT_TOKEN") ?: System.getenv("TOKEN")
 private val botUsername: String = System.getenv("WOWBAGGER_BOT_USER") ?: System.getenv("USER")
-private val webookUpdateHandler = TelegramMessageHandler(TelegramApiClient(botToken), botUsername)
+private val telegramBaseUrl: String? = System.getenv("TELEGRAM_BASE_URL")
+private val webookUpdateHandler = TelegramMessageHandler(TelegramApiClient(botToken, telegramBaseUrl), botUsername)
 
 fun main() {
-    embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 8080) {
+    embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
         install(ContentNegotiation) {
             jackson()
         }
-
         routing {
+            head("/ping") { call.respond(HttpStatusCode.OK) }
+
             post("/$botToken/webhook") {
                 val update = call.receive<Update>()
 

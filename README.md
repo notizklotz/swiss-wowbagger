@@ -35,6 +35,18 @@ https://developer.twitter.com/en/account/environments
 3. Run `twurl -d 'url=https://a9da-2a02-168-a9fe-0-73ba-8f2b-996a-a99f.ngrok.io/webhook' /1.1/account_activity/all/test/webhooks.json`. Replacing the ngrok url with your proper one
 4. 
 
+## Wiremock
+
+`java -jar wiremock-jre8-standalone-2.31.0.jar --enable-browser-proxying --port 9999
+`-Djavax.net.ssl.trustStore=~/.wiremock/ca-keystore.jks`
+`TWITTER_BASE_URL=http://localhost:8081/1.1/`
+
+## Native agent
+```
+export JAVA_HOME=/home/notizklotz/.jdks/graalvm-ce-java11-21.3.0
+mvn -Pnative -Dagent=true -DskipTests=true -DskipNativeBuild=true package exec:exec@java-agent
+```
+
 ## Setup Google Cloud SDK access
 Only needed if you need access to the project's Docker repo or if you want to deploy from localhost.
 

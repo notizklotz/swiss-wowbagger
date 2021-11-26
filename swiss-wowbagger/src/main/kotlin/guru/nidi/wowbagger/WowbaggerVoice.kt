@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package guru.nidi.wowbagger.telegram
+package guru.nidi.wowbagger
 
-import org.telegram.telegrambots.bots.DefaultAbsSender
-import org.telegram.telegrambots.bots.DefaultBotOptions
-import org.telegram.telegrambots.meta.ApiConstants
+import guru.nidi.mbrola.*
+import java.io.File
 
-class TelegramApiClient(private val botToken: String, val telegramBaseUrl: String?) : DefaultAbsSender(DefaultBotOptions()
-    .apply { baseUrl = telegramBaseUrl ?: ApiConstants.BASE_URL }
-) {
-    override fun getBotToken(): String = botToken
+private val voiceFileName = System.getenv("WOWBAGGER_VOICE_FILE") ?: "/usr/share/mbrola/nl2/nl2"
+
+object WowbaggerVoice {
+    // TODO Voice always copies voice files to tmpdir which is bad on Docker (uses RAM)
+    fun say(phonemes: String, format: Format = Format.WAV, speed: Double = .7) =
+        Mbrola(Phonemes.fromString(phonemes), Voice.fromFile(File(voiceFileName)), format).time(speed)
+            .run()
 }

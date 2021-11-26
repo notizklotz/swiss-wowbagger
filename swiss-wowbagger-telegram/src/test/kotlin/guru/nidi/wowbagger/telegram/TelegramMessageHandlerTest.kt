@@ -17,13 +17,13 @@ package guru.nidi.wowbagger.telegram
 
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.Test
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Chat
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.bots.AbsSender
+import kotlin.test.Test
 
 internal class TelegramMessageHandlerTest {
 

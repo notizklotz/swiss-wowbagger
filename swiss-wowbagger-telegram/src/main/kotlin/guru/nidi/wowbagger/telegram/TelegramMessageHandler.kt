@@ -20,7 +20,7 @@ import guru.nidi.wowbagger.Entry
 import guru.nidi.wowbagger.composeSpeech
 import guru.nidi.wowbagger.toPhonemes
 import guru.nidi.wowbagger.toText
-import guru.nidi.wowbagger.voice.WowbaggerVoice
+import guru.nidi.wowbagger.WowbaggerVoice
 import org.slf4j.LoggerFactory
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
