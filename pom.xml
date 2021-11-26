@@ -34,7 +34,7 @@
         <dependency-check.fail-on-cvss>9</dependency-check.fail-on-cvss>
         <docker.build.skip>true</docker.build.skip>
         <docker-repo-prefix>europe-west6-docker.pkg.dev/swiss-wowbagger/docker</docker-repo-prefix>
-        <docker.base.image.tag>${docker-repo-prefix}/swiss-wowbagger-docker-mbrola@sha256:b9bf57c8f1f93c73d940c8f3260345530137bbb41bd806ebeb26e664a77448cc</docker.base.image.tag>
+        <docker.base.image.tag>${docker-repo-prefix}/swiss-wowbagger-docker-mbrola@sha256:5d168d92ffccdbc7348c5272e942ababb56522081c98a0cf96b4096228e507cf</docker.base.image.tag>
     </properties>
 
     <dependencyManagement>

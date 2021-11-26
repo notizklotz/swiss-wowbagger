@@ -1,2 +1,2 @@
-FROM eclipse-temurin:11-jre
+FROM eclipse-temurin:17
 RUN apt-get update && apt-get -y install mbrola
