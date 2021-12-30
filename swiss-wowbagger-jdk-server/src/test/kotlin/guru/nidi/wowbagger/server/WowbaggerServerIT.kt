@@ -112,6 +112,7 @@ internal class WowbaggerServerIT {
     }
 
     @Test
+    @Disabled
     fun getWavFromAzure() {
         val request = requestBuilderTemplate()
             .uri(URI("http://localhost:7125/1640885281661?format=wav&v=undefined&names=&voice=exilzuerchere"))
