@@ -114,7 +114,7 @@ class RootHandler(private val log: PrintWriter) : HttpHandler {
                             headers = mapOf("Content-Type" to "audio/mpeg"),
                             data = null,
                             inputStream = azureSpeechSynthesizer.speakToInputStream(
-                                entries.toText(),
+                                entries.toText(forDisplay = false),
                                 voice.azureVoice!!,
                                 AudioFormat.Mp3
                             )

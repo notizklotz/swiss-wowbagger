@@ -68,11 +68,11 @@ class Entry<out T>(val entry: T, val phonemes: String) {
     }
 }
 
-fun List<Entry<String>>.toText(): String =
+fun List<Entry<String>>.toText(forDisplay: Boolean = true): String =
     joinToString(" ") { it.entry }
         .replace(Regex("\\s+"), " ")
         .replace(Regex(" ([,.!?])"), "$1")
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+        .replaceFirstChar { if (forDisplay && it.isLowerCase()) it.titlecase() else it.toString() }
 
 fun List<Entry<String>>.toPhonemes(): String = joinToString(" ") { it.phonemes }
 

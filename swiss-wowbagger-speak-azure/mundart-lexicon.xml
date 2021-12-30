@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lexicon xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2005/01/pronunciation-lexicon http://www.w3.org/TR/2007/CR-pronunciation-lexicon-20071212/pls.xsd" version="1.0" alphabet="ipa" xml:lang="de-CH" xmlns="http://www.w3.org/2005/01/pronunciation-lexicon">
     <lexeme>
-        <grapheme>Stäcketööri</grapheme>
         <grapheme>stäcketööri</grapheme>
         <phoneme>ʃtæˈkχætøøːrɪ</phoneme>
     </lexeme>
@@ -956,6 +955,10 @@
     <lexeme>
         <grapheme>chäferfüdletroch</grapheme>
         <phoneme>χæferfʏdlɘtroχ</phoneme>
+    </lexeme>
+    <lexeme>
+        <grapheme>chäferfüdletroche</grapheme>
+        <phoneme>χæferfʏdlɘtroχæ</phoneme>
     </lexeme>
     <lexeme>
         <grapheme>düregheit</grapheme>

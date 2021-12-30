@@ -23,7 +23,7 @@ fun main() {
     val azureSpeechSynthesizer = AzureSpeechSynthesizer(System.getenv("AZURE_KEY"))
 
     azureSpeechSynthesizer.speakToInputStream(
-        "Stäcketööri Gusti, du strube chnütschblaue Chaflicheib, i tue der eini abewäsche!",
+        "stäcketööri Gusti, du strube chnütschblaue Chaflicheib, i tue der eini abewäsche!",
         AzureVoice.DeChF,
         AudioFormat.Wav
     ).run {
@@ -31,7 +31,7 @@ fun main() {
     }
 
     azureSpeechSynthesizer.speakToInputStream(
-        "Schissdräck am Loufmeter Sile, du strubi dummi Bohnestange, bisch nid ganz bache?",
+        "schissdräck am Loufmeter Sile, du strubi dummi Bohnestange, bisch nid ganz bache?",
         AzureVoice.FrChF,
         AudioFormat.Wav
     ).run {
@@ -39,7 +39,7 @@ fun main() {
     }
 
     azureSpeechSynthesizer.speakToInputStream(
-        "Hawasch Hene Fridu und Jüre, dir chlyne Schöggeler, hörit uf lauere!",
+        "hawasch Hene Fridu und Jüre, dir chlyne Schöggeler, hörit uf lauere!",
         AzureVoice.ItM,
         AudioFormat.Wav
     ).run {
@@ -47,7 +47,7 @@ fun main() {
     }
 
     azureSpeechSynthesizer.speakToInputStream(
-        "Mitz id Chuchi Heidle Lise und Nigge, dir gfräsige Bännesöi, heit der de Gluggsi?",
+        "mitz id Chuchi Heidle Lise und Nigge, dir gfräsige Bännesöi, heit der de Gluggsi?",
         AzureVoice.DeChF,
         AudioFormat.Wav
     ).run {
